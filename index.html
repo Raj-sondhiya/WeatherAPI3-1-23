@@ -1,32 +1,86 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        h3 {
+            text-align: center;
+            margin-top: 20px;
+        }
 
-    <title>Hello, world!</title>
+        .custom-container {
+            width: 40%;
+            margin: 20px auto;
+            text-align: center;
+            background-image: url('https://img.freepik.com/free-vector/gorgeous-clouds-background-with-blue-sky-design_1017-25501.jpg');
+            background-size: cover;
+            height: 400px;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        #cityName {
+            width: calc(100% - 10px);
+            padding: 5px;
+            box-sizing: border-box;
+        }
+
+        #getWeather {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            background-color: crimson;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        #outPut {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 10px;
+            font-size: 40px;
+            color: white;
+        }
+
+        #outPut p {
+            text-align: left;
+            color: white;
+            font-size: 26px;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 
 <body>
     <h3>Weather details using weathemap API</h3>
-    <div class="container">
-        <div class="row">
-            <div class="col-4">
-                <input type="text" id="cityName" placeholder="Enter city" class="form-control"><br>
-                <button class="btn btn-primary" id="getWeather">Get weather</button>
-            </div>
-            <div class="col-2"></div>
-            <div class="col-6">
-                <h1 id="outPut"></h1>
-            </div>
+    <div class="custom-container">
+        <div class="input-group">
+            <input type="text" id="cityName" placeholder="Enter city name">
+        </div>
+        <button id="getWeather">Get weather</button>
+        <div id="outPut">
+            <span></span>
+            <img id="weatherIcon">
+            <p></p>
         </div>
     </div>
+
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
         crossorigin="anonymous"></script>
@@ -38,11 +92,16 @@
         crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 
-
     <script>
-        $("#getWeather").click(a => {
+        $("#getWeather").click(function () {
             $.get(`https://api.openweathermap.org/data/2.5/weather?q=${$("#cityName").val()}&appid=6bcf6c9630948de1fc78a46cd3afc611`, function (data, status) {
-                $("#outPut").html(data.weather[0].description);
+                const weather = data.weather[0];
+                const icon = weather.icon;
+                const description = weather.description;
+                const temperature = data.main.temp;
+                $("#outPut span").html(description);
+                $("#weatherIcon").attr("src", `http://openweathermap.org/img/w/${icon}.png`).attr("width", "100").attr("height", "100");;
+                $("#outPut p").html(`Temperature: ${data.main.temp} K`);
             });
         });
     </script>
